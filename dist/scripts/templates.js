@@ -9145,7 +9145,8 @@ angular.module('openshiftConsoleTemplates', []).run(['$templateCache', function(
     "<div class=\"container-fluid\">\n" +
     "<tasks></tasks>\n" +
     "<div ng-if=\"renderOptions.showToolbar\" class=\"page-header page-header-bleed-right page-header-bleed-left\">\n" +
-    "<h1 title=\"Overview\">Overview</h1>\n" +
+    "\n" +
+    "<h1 title=\"Overview\">概览</h1>\n" +
     "</div>\n" +
     "\n" +
     "<alerts alerts=\"alerts\"></alerts>\n" +
@@ -9176,13 +9177,16 @@ angular.module('openshiftConsoleTemplates', []).run(['$templateCache', function(
     "<div ng-if=\"(services | hashSize) === 0 && (monopodsByService[''] | hashSize) === 0 && (deploymentsByServiceByDeploymentConfig[''] | hashSize) === 0\">\n" +
     "\n" +
     "<div ng-if=\"renderOptions.showGetStarted\" class=\"empty-project text-center\">\n" +
-    "<h2>Get started with your project.</h2>\n" +
+    "\n" +
+    "<h2>开始操作项目.</h2>\n" +
+    "\n" +
     "<p class=\"gutter-top\">\n" +
-    "Use your source or an example repository to build an application image, or add components like databases and message queues.\n" +
+    "设置你的源代码仓库和其它仓库来制造应用的容器镜像(application image), 或者添加如数据库, 消息队列组件到项目.\n" +
     "</p>\n" +
     "<p class=\"gutter-top\">\n" +
+    "\n" +
     "<a ng-href=\"project/{{projectName}}/create\" class=\"btn btn-lg btn-primary\">\n" +
-    "Add to Project\n" +
+    "添加内容到项目\n" +
     "</a>\n" +
     "</p>\n" +
     "</div>\n" +
@@ -9345,8 +9349,10 @@ angular.module('openshiftConsoleTemplates', []).run(['$templateCache', function(
     "<div ng-if=\"!showGetStarted\" class=\"container surface-shaded\"> \n" +
     "<div ng-if=\"(projects | hashSize) === 0\" class=\"text-muted\" style=\"margin-top: 50px\">Loading...</div>\n" +
     "<div ng-if=\"(projects | hashSize) !== 0\" class=\"gutter-top\">\n" +
-    "<h1 style=\"display: inline-block\">Projects</h1>\n" +
-    "<a ng-if=\"canCreate\" href=\"create-project\" style=\"margin-top: 10px\" class=\"btn btn-lg btn-primary pull-right\">New Project</a>\n" +
+    "\n" +
+    "<h1 style=\"display: inline-block\">项目</h1>\n" +
+    "\n" +
+    "<a ng-if=\"canCreate\" href=\"create-project\" style=\"margin-top: 10px\" class=\"btn btn-lg btn-primary pull-right\">创建</a>\n" +
     "<alerts alerts=\"alerts\"></alerts>\n" +
     "<div ng-repeat=\"project in projects | orderByDisplayName track by project.metadata.name\" class=\"animate-repeat\">\n" +
     "<div row flex cross-axis=\"center\" class=\"tile tile-project tile-click tile-flex\">\n" +
@@ -9363,7 +9369,8 @@ angular.module('openshiftConsoleTemplates', []).run(['$templateCache', function(
     "<span class=\"fa-lg mar-right-lg\">\n" +
     "<a ng-href=\"project/{{project.metadata.name}}/edit\" class=\"action-button\">\n" +
     "<i class=\"fa fa-pencil\" aria-hidden=\"true\"></i>\n" +
-    "<span class=\"sr-only\">Edit Project</span>\n" +
+    "\n" +
+    "<span class=\"sr-only\">属性</span>\n" +
     "</a>\n" +
     "</span>\n" +
     "<delete-link class=\"fa-lg\" kind=\"Project\" resource-name=\"{{project.metadata.name}}\" project-name=\"{{project.metadata.name}}\" display-name=\"{{(project | displayName)}}\" type-name-to-confirm=\"true\" stay-on-current-page=\"true\" alerts=\"alerts\" button-only>\n" +
@@ -9372,12 +9379,14 @@ angular.module('openshiftConsoleTemplates', []).run(['$templateCache', function(
     "</div>\n" +
     "</div>\n" +
     "<div ng-if=\"canCreate === false\" style=\"margin-top: 10px\">\n" +
-    "<span ng-if=\"!newProjectMessage\">A cluster admin can create a project for you by running the command\n" +
+    "\n" +
+    "<span ng-if=\"!newProjectMessage\">集群管理员角色(cluster admin)可以使用命令为开发者创建项目(project POST API)\n" +
     "<code>oadm new-project &lt;projectname&gt; --admin={{user.metadata.name || '&lt;YourUsername&gt;'}}</code></span>\n" +
     "<span ng-if=\"newProjectMessage\" ng-bind-html=\"newProjectMessage | linky\" style=\"white-space:pre\"></span>\n" +
     "</div>\n" +
+    "\n" +
     "<div style=\"margin-top: 10px\">\n" +
-    "A project admin can add you to a role on a project by running the command\n" +
+    "项目管理员角色(project admin)可以使用命令为开发者指定其项目的色\n" +
     "<code>oc policy add-role-to-user &lt;role&gt; {{user.metadata.name || '&lt;YourUsername&gt;'}} -n &lt;projectname&gt;</code>\n" +
     "</div>\n" +
     "</div>\n" +
@@ -9387,15 +9396,20 @@ angular.module('openshiftConsoleTemplates', []).run(['$templateCache', function(
     "<alerts alerts=\"alerts\"></alerts>\n" +
     "</div>\n" +
     "<div class=\"empty-state-message empty-state-full-page text-center\">\n" +
-    "<h1>Welcome to OpenShift.</h1>\n" +
+    "\n" +
+    "<h1>欢迎访问OpenShift轻元版.</h1>\n" +
+    "\n" +
     "<p>\n" +
-    "OpenShift helps you quickly develop, host, and scale applications.<br>\n" +
-    "<span ng-if=\"canCreate\">Create a project for your application.</span>\n" +
+    "OpenShift在轻云容器云上快速开发，部署，和弹性管理你的应用.<br>\n" +
+    "<span ng-if=\"canCreate\">为你的应用新建一个项目.</span>\n" +
     "</p>\n" +
-    "<a ng-if=\"canCreate\" href=\"create-project\" class=\"btn btn-lg btn-primary\">New Project</a>\n" +
-    "<p>To learn more, visit the OpenShift <a target=\"_blank\" ng-href=\"{{'' | helpLink}}\">documentation</a>.</p>\n" +
+    "\n" +
+    "<a ng-if=\"canCreate\" href=\"create-project\" class=\"btn btn-lg btn-primary\">新建项目</a>\n" +
+    "\n" +
+    "<p>相关知识, 请访问OpenShift <a target=\"_blank\" ng-href=\"{{'' | helpLink}}\">社区文档</a>.</p>\n" +
     "<p ng-if=\"canCreate === false\">\n" +
-    "<span ng-if=\"!newProjectMessage\">A cluster admin can create a project for you by running the command<br>\n" +
+    "\n" +
+    "<span ng-if=\"!newProjectMessage\">集群管理员角色(cluster admin)可以使用命令为开发者创建项目(project POST API)<br>\n" +
     "<code>oadm new-project &lt;projectname&gt; --admin={{user.metadata.name || '&lt;YourUsername&gt;'}}</code></span>\n" +
     "<span ng-if=\"newProjectMessage\" ng-bind-html=\"newProjectMessage | linky\" style=\"white-space:pre\"></span>\n" +
     "</p>\n" +

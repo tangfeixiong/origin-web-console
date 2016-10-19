@@ -1,0 +1,292 @@
+
+
+/Users/fanhongling/Downloads/workspace-openshift/src/github.com/openshift/origin-web-console/app/scripts/app.js
+
+angular
+  .module('openshiftConsole', [
+
+  ])
+  .config(function ($routeProvider) {
+    $routeProvider
+      .when('/', {
+        templateUrl: 'views/projects.html',
+        controller: 'ProjectsController'
+      })
+
+      .when('/oauth', {
+        templateUrl: 'views/util/oauth.html',
+        controller: 'OAuthController'
+      })
+
+      .otherwise({
+        redirectTo: '/'
+      });
+  })
+
+  .constant("API_CFG", _.get(window.OPENSHIFT_CONFIG, "api", {}))
+
+  .constant("AUTH_CFG", _.get(window.OPENSHIFT_CONFIG, "auth", {}))
+
+  .config(function($httpProvider, AuthServiceProvider, RedirectLoginServiceProvider, AUTH_CFG, API_CFG, kubernetesContainerSocketProvider) {
+    $httpProvider.interceptors.push('AuthInterceptor');
+
+    AuthServiceProvider.LoginService('RedirectLoginService');
+    AuthServiceProvider.LogoutService('DeleteTokenLogoutService');
+    // TODO: fall back to cookie store when localStorage is unavailable (see known issues at http://caniuse.com/#feat=namevalue-storage)
+    AuthServiceProvider.UserStore('LocalStorageUserStore');
+
+    RedirectLoginServiceProvider.OAuthClientID(AUTH_CFG.oauth_client_id);
+    RedirectLoginServiceProvider.OAuthAuthorizeURI(AUTH_CFG.oauth_authorize_uri);
+    RedirectLoginServiceProvider.OAuthRedirectURI(URI(AUTH_CFG.oauth_redirect_base).segment("oauth").toString());
+
+    // Configure the container terminal
+    kubernetesContainerSocketProvider.WebSocketFactory = "ContainerWebSocket";
+  })
+
+/Users/fanhongling/Downloads/workspace-openshift/src/github.com/openshift/origin-web-console/app/scripts/controllers/util/oauth.js
+
+angular.module('openshiftConsole')
+  .controller('OAuthController', function ($scope, $location, $q, RedirectLoginService, DataService, AuthService, Logger) {
+  /* Controllers
+     https://docs.angularjs.org/guide/controller
+     Controller is attached to the DOM via the ng-controller directive
+  */
+  // OAuthController of the openshiftConsole
+
+    RedirectLoginService.finish()
+    .then(function(data) {
+
+      DataService.get("users", "~", {}, opts)
+      .then(function(user) {
+
+      })
+      .catch(function(rejection) {
+        // Handle an API error response fetching the user
+
+      });
+
+    })
+    .catch(function(rejection) {
+
+    });
+
+  })
+
+/Users/fanhongling/Downloads/workspace-openshift/src/github.com/openshift/origin-web-console/app/scripts/services/auth.js
+
+angular.module('openshiftConsole')
+// In a config step, set the desired user store and login service. For example:
+//   AuthServiceProvider.setUserStore('LocalStorageUserStore')
+//   AuthServiceProvider.setLoginService('RedirectLoginService')
+//
+// AuthService provides the following functions:
+//   withUser()
+//     returns a promise that resolves when there is a current user
+//     starts a login if there is no current user
+//   setUser(user, token[, ttl])
+//     sets the current user and token to use for authenticated requests
+//     if ttl is specified, it indicates how many seconds the user and token are valid
+//     triggers onUserChanged callbacks if the new user is different than the current user
+//   requestRequiresAuth(config)
+//     returns true if the request is to a protected URL
+//   addAuthToRequest(config)
+//     adds auth info to the request, if available
+//     if specified, uses config.auth.token as the token, otherwise uses the token store
+//   startLogin()
+//     returns a promise that is resolved when the login is complete
+//   onLogin(callback)
+//     the given callback is called whenever a login is completed
+//   onUserChanged(callback)
+//     the given callback is called whenever the current user changes
+.provider('AuthService', function() {
+  /* Provider Recipe
+     https://docs.angularjs.org/guide/providers
+     The Provider recipe is syntactically defined as a custom type that implements a $get method
+  */
+  /* setter & getter */
+  var _userStore = "";
+  this.UserStore = function(userStoreName) {
+
+  };
+  var _loginService = "";
+  this.LoginService = function(loginServiceName) {
+
+  };
+  var _logoutService = "";
+  this.LogoutService = function(logoutServiceName) {
+
+  this.$get = function($q, $injector, $log, $rootScope, Logger) {
+
+
+    return {
+
+      // Returns the configured user store
+      UserStore: function() {
+
+      },
+
+      // Returns true if currently logged in.
+      isLoggedIn: function() {
+
+      },
+
+      // Returns a promise of a user, which is resolved with a logged in user. Triggers a login if needed.
+      withUser: function() {
+        var user = userStore.getUser();
+        if (user) {
+          $rootScope.user = user;
+          authLogger.log('AuthService.withUser()', user);
+          return $q.when(user);
+        } else {
+          authLogger.log('AuthService.withUser(), calling startLogin()');
+          return this.startLogin();
+        }
+      },
+
+      setUser: function(user, token, ttl) {
+
+      },
+
+      requestRequiresAuth: function(config) {
+
+      },
+      addAuthToRequest: function(config) {
+        // Use the given token, if provided
+
+      },
+
+      startLogin: function() {
+        if (_loginPromise) {
+          authLogger.log("Login already in progress");
+          return _loginPromise;
+        }
+        var self = this;
+        _loginPromise = loginService.login().then(function(result) {
+          self.setUser(result.user, result.token, result.ttl);
+          _loginCallbacks.fire(result.user);
+        }).catch(function(err) {
+          Logger.error(err);
+        }).finally(function() {
+          _loginPromise = null;
+        });
+        return _loginPromise;
+      },
+
+      startLogout: function() {
+
+      },
+
+      // TODO: add a way to unregister once we start doing in-page logins
+      onLogin: function(callback) {
+
+      },
+      // TODO: add a way to unregister once we start doing in-page logouts
+      onLogout: function(callback) {
+
+      },
+      // TODO: add a way to unregister once we start doing in-page user changes
+      onUserChanged: function(callback) {
+
+      }
+    };
+  };
+})
+// register the interceptor as a service
+.factory('AuthInterceptor', ['$q', 'AuthService', function($q, AuthService) {
+  /* Interceptors
+     https://docs.angularjs.org/api/ng/service/$http
+     For purposes of global error handling, authentication, or any kind of
+     synchronous or asynchronous pre-processing of request or postprocessing of responses
+  */
+
+  // TODO: subscribe to user change events to empty the saved configs
+  // TODO: subscribe to login events to retry the saved configs
+
+  return {
+    // If auth is not needed, or is already present, returns a config
+    // If auth is needed and not present, starts a login flow and returns a promise of a config
+    request: function(config) {
+
+      return deferred.promise;
+    },
+
+    responseError: function(rejection) {
+
+    }
+  };
+}]);
+
+
+/Users/fanhongling/Downloads/workspace-openshift/src/github.com/openshift/origin-web-console/app/scripts/services/login.js
+
+// Login strategies
+angular.module('openshiftConsole')
+.provider('RedirectLoginService', function() {
+  var _oauth_client_id = "";
+  var _oauth_authorize_uri = "";
+  var _oauth_redirect_uri = "";
+
+  /* setter & getter */
+  this.OAuthClientID = function(id) {
+
+  };
+  this.OAuthAuthorizeURI = function(uri) {
+
+  };
+  this.OAuthRedirectURI = function(uri) {
+
+  };
+
+  this.$get = function($location, $q, Logger) {
+
+
+    return {
+      // Returns a promise that resolves with {user:{...}, token:'...', ttl:X}, or rejects with {error:'...'[,error_description:'...',error_uri:'...']}
+      login: function() {
+
+        // Return a promise we never intend to keep, because we're redirecting to another page
+        return deferred.promise;
+      },
+
+      // Parses oauth callback parameters from window.location
+      // Returns a promise that resolves with {token:'...',then:'...',verified:true|false}, or rejects with {error:'...'[,error_description:'...',error_uri:'...']}
+      // If no token and no error is present, resolves with {}
+      // Example error codes: https://tools.ietf.org/html/rfc6749#section-5.2
+      finish: function() {
+
+        // Error codes can come in query params or fragment params
+        // Handle an error response from the OAuth server
+        var error = queryParams.error || fragmentParams.error;
+        if (error) {
+          var error_description = queryParams.error_description || fragmentParams.error_description;
+          var error_uri = queryParams.error_uri || fragmentParams.error_uri;
+          authLogger.log("RedirectLoginService.finish(), error", error, error_description, error_uri);
+          return $q.reject({
+            error: error,
+            error_description: error_description,
+            error_uri: error_uri
+          });
+        }
+        
+
+        // Handle an access_token response
+        if (fragmentParams.access_token && (fragmentParams.token_type || "").toLowerCase() === "bearer") {
+          var deferred = $q.defer();
+          deferred.resolve({
+            token: fragmentParams.access_token,
+            ttl: fragmentParams.expires_in,
+            then: stateData.then,
+            verified: stateData.verified
+          });
+          return deferred.promise;
+        }
+
+        // No token and no error is invalid
+        return $q.reject({
+          error: "invalid_request",
+          error_description: "No API token returned"
+        });
+      }
+    };
+  };
+});

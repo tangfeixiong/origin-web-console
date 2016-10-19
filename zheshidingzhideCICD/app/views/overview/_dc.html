@@ -1,0 +1,117 @@
+<div class="overview-tile" ng-class="{ 'deployment-in-progress': inProgressDeployment }">
+  <ng-include src="'views/overview/_service-header.html'"></ng-include>
+  <div class="overview-tile-header">
+    <div class="rc-header">
+      <div>
+        Deployment
+        <a ng-href="{{deploymentConfig | navigateResourceURL}}">{{dcName}}</a>
+        <small class="overview-timestamp" ng-if="activeReplicationController && !inProgressDeployment">
+          <span class="hidden-xs">&ndash;</span>
+          <relative-timestamp timestamp="activeReplicationController.metadata.creationTimestamp"></relative-timestamp>
+        </small>
+      </div>
+      <div>
+        <div class="small truncate">
+          <image-names
+              ng-if="activeReplicationController && !inProgressDeployment && showMetrics"
+              pod-template="activeReplicationController.spec.template"
+              pods="podsByOwnerUID[activeReplicationController.metadata.uid]">
+          </image-names>
+        </div>
+        <div ng-if="inProgressDeployment" class="small">
+          {{deploymentConfig.spec.strategy.type}} <ellipsis-pulser color="dark" size="sm" display="inline" msg="deployment in progress"></ellipsis-pulser>
+          <span ng-if="'deploymentconfigs/log' | canI : 'get'" class="deployment-log-link">
+            <a ng-href="{{inProgressDeployment | navigateResourceURL}}?tab=logs">View Log</a>
+            <span ng-if="'replicationcontrollers' | canI: 'update'" class="action-divider">|</span>
+          </span>
+          <span ng-if="'replicationcontrollers' | canI : 'update'" class="deployment-log-link">
+            <a href="" ng-click="cancelDeployment()" role="button">Cancel</a>
+          </span>
+        </div>
+        <div ng-if="deploymentConfig.spec.paused" class="small">
+          <span class="pficon pficon-info" aria-hidden="true"></span>
+          Deployment is paused.
+          <span ng-if="'deploymentconfigs' | canI : 'update'">
+            <a href="" ng-click="resumeDeployment()" role="button">Resume</a>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div column flex class="shield" ng-if="activeReplicationController"
+          ng-class="{ 'shield-lg': (activeReplicationController | annotation: 'deploymentVersion').length > 3 }">
+      <a ng-href="{{activeReplicationController | navigateResourceURL}}">
+        <span class="shield-number">#{{activeReplicationController | annotation: 'deploymentVersion'}}</span>
+      </a>
+    </div>
+  </div>
+  <div row class="overview-tile-body">
+    <!-- all visible replication controllers -->
+    <div column class="overview-donut"
+        ng-repeat="replicationController in orderedReplicationControllers track by (replicationController | uid)"
+        ng-class="{ latest: isDeploymentLatest(replicationController) }"
+        ng-if="!activeReplicationController || !(isDeploymentLatest(replicationController) && ((replicationController | deploymentStatus) == 'Cancelled' || (replicationController | deploymentStatus) == 'Failed'))">
+      <deployment-donut
+          rc="replicationController"
+          deployment-config="deploymentConfig"
+          pods="podsByOwnerUID[replicationController.metadata.uid]"
+          hpa="getHPA(deploymentConfig) || getHPA(replicationController)"
+          limit-ranges="limitRanges"
+          quotas="quotas"
+          cluster-quotas="clusterQuotas"
+          scalable="isScalableReplicationController(replicationController)"
+          alerts="alerts">
+      </deployment-donut>
+    </div>
+    <!-- /all visible replication controllers -->
+
+    <!-- deployment in progress (connecting arrow) -->
+    <div column class="overview-donut-connector" ng-class="{'contains-deployment-status-msg':replicationControllers.length === 1}" ng-if="inProgressDeployment">
+      <div ng-if="replicationControllers.length > 1" class="deployment-connector-arrow">
+
+      </div>
+      <div ng-if="replicationControllers.length === 1" class="deployment-status-msg">
+        <status-icon status="replicationControllers[0] | deploymentStatus" class="mar-right-xs"></status-icon>
+        Deployment&nbsp;#{{replicationControllers[0] | annotation : 'deploymentVersion'}}
+        {{replicationControllers[0] | deploymentStatus | lowercase}}
+      </div>
+    </div>
+    <!-- /deployment in progress (connecting arrow) -->
+
+    <!-- cancelled/failed state -->
+    <div column class="overview-unsuccessful-state" ng-if="!activeReplicationController && !inProgressDeployment" ng-switch="replicationControllers[0] | deploymentStatus">
+      <div ng-switch-when="Cancelled">
+        <span class="deployment-status-msg">
+          <i class="fa fa-ban" aria-hidden="true"></i>
+          {{dcName}}
+          <a ng-href="{{replicationControllers[0] | navigateResourceURL}}">#{{replicationControllers[0] | annotation: 'deploymentVersion'}}</a>
+          cancelled
+        </span>
+      </div>
+      <div ng-switch-when="Failed">
+        <span class="text-danger deployment-status-msg">
+          <i class="fa fa-times" aria-hidden="true"></i>
+          {{dcName}}
+          <a ng-href="{{replicationControllers[0] | navigateResourceURL}}">#{{replicationControllers[0] | annotation: 'deploymentVersion'}}</a>
+          failed
+        </span>
+      </div>
+    </div>
+    <!-- /cancelled/failed state -->
+
+    <!-- succeeded state -->
+    <div column class="overview-tile-details" ng-if="activeReplicationController && !inProgressDeployment">
+      <!-- metrics or pod template -->
+      <!-- pause metrics updates when the service group is collapsed -->
+      <deployment-metrics
+        ng-if="showMetrics && !collapse"
+        pods="podsByOwnerUID[activeReplicationController.metadata.uid]"
+        containers="activeReplicationController.spec.template.spec.containers"
+        compact="true"
+        class="overview-metrics">
+      </deployment-metrics>
+      <pod-template ng-if="!showMetrics" pod-template="activeReplicationController.spec.template"></pod-template>
+      <!-- /metrics or pod template -->
+    </div>
+    <!-- /succeeded state -->
+  </div>
+</div>

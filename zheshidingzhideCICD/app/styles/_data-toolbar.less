@@ -1,0 +1,57 @@
+/* Data toolbar
+   - Includes customizations for label filter input and active filter
+---------------------------------------------------------------------------- */
+
+.data-toolbar {
+  padding: 5px 0;
+  @media (min-width: @screen-sm-min) {
+    .flex-display(@display: flex);
+  }
+  // Set min-widths to prevent clipping when option lengths are known
+  &.other-resources-toolbar .data-toolbar-dropdown {
+    min-width: 210px;
+  }
+  .checkbox {
+    margin-bottom: 0;
+    margin-top: 10px;
+    @media (min-width: @screen-sm-min) {
+      .flex(@columns: 1 1 0%);
+      margin-left: 20px;
+      margin-top: 3px;
+      text-align: right;
+    }
+  }
+  .data-toolbar-filter {
+    @media (min-width: @screen-sm-min) {
+      .flex(@columns: 1 1 0%);
+    }
+    @media (min-width: @screen-md-min) {
+      max-width: 600px;
+    }
+    .filter .navbar-filter-widget .label-filter .selectize-control .selectize-input {
+      &, & input {
+        font-size: @font-size-base;
+      }
+    }
+    .form-group {
+      margin-bottom: 0;
+    }
+  }
+  // TODO:  remove this rule with https://github.com/openshift/origin-web-console/issues/220
+  .data-toolbar-views {
+    .flex(@columns: 0 1 auto);
+    text-align: right;
+    @media (min-width: @screen-lg-min) {
+      .flex(@columns: 0 1 auto);
+    }
+  }
+  .vertical-divider + .data-toolbar-filter {
+    margin-top: 10px;
+    @media (min-width: @screen-sm-min) {
+      margin-top: 0;
+    }
+  }
+}
+.selectize-dropdown {
+  font-size: @font-size-base;
+}
