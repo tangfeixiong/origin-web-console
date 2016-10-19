@@ -15,31 +15,30 @@
               <div class="col-md-12">
                 <uib-tabset class="mar-top-none">
                   <uib-tab active="selectedTab.fromCatalog">
-                    <uib-tab-heading>Browse Catalog</uib-tab-heading>
+                    <uib-tab-heading>查看应用的模版(Browse Catalog)</uib-tab-heading>
 
                     <p ng-if="emptyCatalog && !loaded">Loading...</p>
 
                     <div ng-if="emptyCatalog && loaded && !nonBuilderImages.length" class="empty-state-message empty-state-full-page">
-                      <h2 class="text-center">No images or templates.</h2>
+                      <h2 class="text-center">你还没有容器镜像和应用模版.</h2>
 
                       <p class="gutter-top">
-                        No images or templates are loaded for this project or the shared
-                        <code>openshift</code> namespace. An image or template is
-                        required to add content.
+                        当前还没有上传容器镜像或应用模版到该项目，或来自其它
+                        <code>openshift</code> namespace的分享. 对应用来说, image or template 是必须的.
                       </p>
 
                       <p>
-                        To add an image stream or template from a file, use the editor in the
-                        <strong>Import YAML / JSON</strong> tab, or run the following command:
+                        若需从本地上传一个image stream 或 template 文件, 可使用
+                        <strong>导入 YAML / JSON</strong> 标签页上的编辑器, 或者运行命令:
                         <div><code>oc create -f &lt;filename&gt; -n {{projectName}}</code></div>
                       </p>
 
-                      <p><a href="{{projectName | projectOverviewURL}}">Back to overview</a></p>
+                      <p><a href="{{projectName | projectOverviewURL}}">概览(Back to overview)</a></p>
                     </div>
 
                     <!-- Show an abbreviated message if only non-builders exist in the project.
                          We show a link to view the non-builder images below. -->
-                    <p ng-if="emptyCatalog && loaded && nonBuilderImages.length">No builder images or templates.</p>
+                    <p ng-if="emptyCatalog && loaded && nonBuilderImages.length">没有用于Docker build持续集成的 images 或 templates.</p>
 
                     <div ng-show="!emptyCatalog">
 

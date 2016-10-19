@@ -20,14 +20,14 @@
                 Loading...
               </div>
               <div ng-if="buildConfigsLoaded" class="empty-state-message text-center">
-                <h2>No pipelines.</h2>
+                <h2>没有CI/CD流水线.</h2>
                 <div ng-if="project.metadata.name | canIAddToProject">
                   <p>
-                    No pipelines have been added to project {{projectName}}.
+                    还没有流水线添加到项目 {{projectName}}.
                   </p>
                   <p ng-if="project.metadata.name | canIAddToProject">
                     <a ng-href="project/{{projectName}}/create" class="btn btn-lg btn-primary">
-                      Add to Project
+                      添加
                     </a>
                   </p>
                 </div>

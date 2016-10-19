@@ -10,12 +10,13 @@
         <div class="middle-content">
           <div class="container surface-shaded gutter-top">
             <div class="col-md-12">
-              <h1>New Project</h1>
+              <!--<h1>New Project</h1>-->
+              <h1>新项目</h1>
               <alerts alerts="alerts"></alerts>
               <form name="createProjectForm">
                 <fieldset ng-disabled="disableInputs">
                   <div class="form-group">
-                    <label for="name" class="required">Name</label>
+                    <label for="name" class="required">名称(API定义: Project.Name)</label>
                     <span ng-class="{'has-error': (createProjectForm.name.$error.pattern && createProjectForm.name.$touched) || nameTaken}">
                       <input class="form-control input-lg"
                           name="name"
@@ -36,21 +37,20 @@
                           spellcheck="false">
                     </span>
                     <div>
-                      <span class="help-block">A unique name for the project.</span>
+                      <span class="help-block">项目标识名，符合IETF rfc1035/rfc1123规范，即最多253个小写字母数字，包括减号的DNS_SUBDOMAIN格式.</span>
                     </div>
                     <div class="has-error">
                       <span id="nameHelp" class="help-block" ng-if="createProjectForm.name.$error.pattern && createProjectForm.name.$touched">
-                        Project names may only contain lower-case letters, numbers, and dashes.
-                        They may not start or end with a dash.</span>
+                        名称只能使用小写字母, 数字, 和减号. 并且开始和结尾不能使用减号.</span>
                     </div>
                     <div class="has-error">
-                      <span class="help-block" ng-if="nameTaken">This name is already
-                          in use. Please choose a different name.</span>
+                      <span class="help-block" ng-if="nameTaken">
+                          名称已经被其它项目使用. 请重新输入.</span>
                     </div>
                   </div>
 
                   <div class="form-group">
-                    <label for="displayName">Display Name</label>
+                    <label for="displayName">全称(API定义: Project.DisplayName)</label>
                     <input class="form-control input-lg"
                         name="displayName"
                         id="displayName"
@@ -60,7 +60,7 @@
                   </div>
 
                   <div class="form-group">
-                    <label for="description">Description</label>
+                    <label for="description">描述(API定义: Project.Description)</label>
                     <textarea class="form-control input-lg"
                         name="description"
                         id="description"
@@ -73,8 +73,8 @@
                         class="btn btn-primary btn-lg"
                         ng-click="createProject()"
                         ng-disabled="createProjectForm.$invalid || nameTaken || disableInputs"
-                        value="">Create</button>
-                    <a class="btn btn-default btn-lg" href="#" back>Cancel</a>
+                        value="">创建</button>
+                    <a class="btn btn-default btn-lg" href="#" back>取消</a>
                   </div>
                 </fieldset>
               </form>

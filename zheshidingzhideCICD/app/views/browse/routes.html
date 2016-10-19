@@ -8,9 +8,9 @@
         <div class="container-fluid">
           <div class="page-header page-header-bleed-right page-header-bleed-left">
             <div class="pull-right" ng-if="project && ('routes' | canI : 'create')">
-              <a ng-href="project/{{project.metadata.name}}/create-route" class="btn btn-default">Create Route</a>
+              <a ng-href="project/{{project.metadata.name}}/create-route" class="btn btn-default">创建路由</a>
             </div>
-            <h1>Routes</h1>
+            <h1>路由（API的定义：Route）</h1>
           </div>
           <alerts alerts="alerts"></alerts>
           <div ng-if="!renderOptions.showGetStarted" class="data-toolbar">
@@ -27,8 +27,8 @@
               <table class="table table-bordered table-hover table-mobile">
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Hostname</th>
+                    <th>名称</th>
+                    <th>主机（Hostname）</th>
                     <th>Routes To</th>
                     <th>Target Port</th>
                     <th>TLS Termination</th>

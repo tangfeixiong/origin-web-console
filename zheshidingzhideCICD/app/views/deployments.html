@@ -7,7 +7,7 @@
       <div class="middle-header header-light">
         <div class="container-fluid">
           <div class="page-header page-header-bleed-right page-header-bleed-left">
-            <h1>Deployments</h1>
+            <h1>发布</h1>
           </div>
           <alerts alerts="alerts"></alerts>
           <div ng-if="!renderOptions.showGetStarted" class="data-toolbar">
@@ -22,15 +22,15 @@
           <div class="row">
             <div class="col-md-12"
                  ng-class="{ 'gutter-top': !(deployments | hashSize) && !(replicaSets | hashSize) }">
-              <h3 ng-if="(deployments | hashSize) || (replicaSets | hashSize)">Deployment Configurations</h3>
+              <h3 ng-if="(deployments | hashSize) || (replicaSets | hashSize)">发布设置</h3>
               <table class="table table-bordered table-hover table-mobile">
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Last Version</th>
-                    <th>Status</th>
-                    <th>Created</th>
-                    <th>Trigger</th>
+                    <th>发布名</th>
+                    <th>最近发布的版本</th>
+                    <th>状态</th>
+                    <th>发布时间</th>
+                    <th>触发器</th>
                   </tr>
                 </thead>
                 <!-- message doesnt show right when there are both dcs and rcs and they are all filtered -->

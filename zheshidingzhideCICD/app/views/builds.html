@@ -7,7 +7,7 @@
       <div class="middle-header header-light">
         <div class="container-fluid">
           <div class="page-header page-header-bleed-right page-header-bleed-left">
-            <h1>Builds</h1>
+            <h1>容器镜像制作</h1>
           </div>
           <alerts alerts="alerts"></alerts>
           <div ng-if="!renderOptions.showGetStarted" class="data-toolbar">
@@ -24,12 +24,12 @@
               <table class="table table-bordered table-hover table-mobile">
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Last Build</th>
-                    <th>Status</th>
-                    <th>Created</th>
-                    <th>Type</th>
-                    <th>Source</th>
+                    <th>配置名</th>
+                    <th>最近一次制作</th>
+                    <th>状态</th>
+                    <th>配置时间</th>
+                    <th>类型</th>
+                    <th>来源</th>
                   </tr>
                 </thead>
                 <tbody ng-if="!(latestByConfig | hashSize)">

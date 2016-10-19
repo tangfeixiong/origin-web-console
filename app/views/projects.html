@@ -63,7 +63,7 @@
                 <code>oc policy add-role-to-user &lt;role&gt; {{user.metadata.name || '&lt;YourUsername&gt;'}} -n &lt;projectname&gt;</code>
               </div>-->
               <div style="margin-top: 10px;">
-                项目管理员角色(project admin)可以使用命令为开发者指定其项目的色
+                项目管理员角色(project admin)可以使用命令为开发者指定其项目的角色
                 <code>oc policy add-role-to-user &lt;role&gt; {{user.metadata.name || '&lt;YourUsername&gt;'}} -n &lt;projectname&gt;</code>
               </div>
             </div>
@@ -83,11 +83,11 @@
               </p>-->
               <p>
                 OpenShift在轻云容器云上快速开发，部署，和弹性管理你的应用.<br>
-                <span ng-if="canCreate">为你的应用新建一个项目.</span>
+                <span ng-if="canCreate">点击下面按钮，创建一个CI／CD项目.</span>
               </p>
 
               <!--<a ng-if="canCreate" href="create-project" class="btn btn-lg btn-primary">New Project</a>-->
-              <a ng-if="canCreate" href="create-project" class="btn btn-lg btn-primary">新建项目</a>
+              <a ng-if="canCreate" href="create-project" class="btn btn-lg btn-primary">创建新的项目</a>
 
               <!--<p>To learn more, visit the OpenShift <a target="_blank" ng-href="{{'' | helpLink}}">documentation</a>.</p>-->
               <p>相关知识, 请访问OpenShift <a target="_blank" ng-href="{{'' | helpLink}}">社区文档</a>.</p>
