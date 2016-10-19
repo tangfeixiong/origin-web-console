@@ -9,7 +9,8 @@
           <tasks></tasks>
 
           <div ng-if="renderOptions.showToolbar" class="page-header page-header-bleed-right page-header-bleed-left">
-            <h1 title="Overview">Overview</h1>
+            <!--<h1 title="Overview">Overview</h1>-->
+            <h1 title="Overview">概览</h1>
           </div>
           <!-- TODO handle things that don't live under services -->
           <alerts alerts="alerts"></alerts>
@@ -41,14 +42,22 @@
               <div ng-if="(services | hashSize) === 0 && (monopodsByService[''] | hashSize) === 0 && (deploymentsByServiceByDeploymentConfig[''] | hashSize) === 0">
                 <!-- Getting started -->
                 <div ng-if="renderOptions.showGetStarted" class="empty-project text-center">
-                  <h2>Get started with your project.</h2>
-                  <p class="gutter-top">
+                  <!--<h2>Get started with your project.</h2>-->
+                  <h2>开始操作项目.</h2>
+                  <!--<p class="gutter-top">
                     Use your source or an example repository to build an application
                     image, or add components like databases and message queues.
+                  </p>-->
+                  <p class="gutter-top">
+                    设置你的源代码仓库和其它仓库来制造应用的容器镜像(application
+                    image), 或者添加如数据库, 消息队列组件到项目.
                   </p>
                   <p class="gutter-top">
-                    <a ng-href="project/{{projectName}}/create" class="btn btn-lg btn-primary">
+                    <!--<a ng-href="project/{{projectName}}/create" class="btn btn-lg btn-primary">
                       Add to Project
+                    </a>-->
+                    <a ng-href="project/{{projectName}}/create" class="btn btn-lg btn-primary">
+                      添加内容到项目
                     </a>
                   </p>
                 </div>
